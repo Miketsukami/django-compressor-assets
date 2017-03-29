@@ -9,7 +9,7 @@ setup(
     author='Artem Suhanov',
     author_email='a.o.suhanov@gmail.com',
     description='',
-    requires=[
+    install_requires=[
         'django',
         'django-compressor'
     ]
