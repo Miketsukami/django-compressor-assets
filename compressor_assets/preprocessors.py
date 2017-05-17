@@ -50,13 +50,13 @@ class GenericPreprocessor(AbstractPreprocessor):
 class SassPreprocessor(AbstractPreprocessor):
     command = 'sass'
 
-    def __init__(self, include_folder_name=None, **kwargs):
+    def __init__(self, include_dir=None, **kwargs):
         super().__init__(**kwargs)
-        if include_folder_name:
+        if include_dir:
             load_path = self.params.get('load-path') or []
             self.params['load-path'] = list(
                 set([load_path] if isinstance(load_path, str) else [load_path]) |
-                set(get_include_dirs(include_folder_name))
+                set(get_include_dirs(include_dir))
             )
 
 
