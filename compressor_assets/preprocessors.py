@@ -1,4 +1,3 @@
-from compressor_assets.utils import get_include_dirs
 from django.core.exceptions import ImproperlyConfigured
 
 
@@ -49,15 +48,6 @@ class GenericPreprocessor(AbstractPreprocessor):
 
 class SassPreprocessor(AbstractPreprocessor):
     command = 'sass'
-
-    def __init__(self, include_dir=None, **kwargs):
-        super().__init__(**kwargs)
-        if include_dir:
-            load_path = self.params.get('load-path') or []
-            self.params['load-path'] = list(
-                set([load_path] if isinstance(load_path, str) else [load_path]) |
-                set(get_include_dirs(include_dir))
-            )
 
 
 Preprocessor = GenericPreprocessor
