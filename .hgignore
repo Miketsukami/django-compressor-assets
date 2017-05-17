@@ -1,0 +1,6 @@
+syntax: glob
+
+.idea/
+django_compressor_assets.egg-info/
+
+*.pyc
