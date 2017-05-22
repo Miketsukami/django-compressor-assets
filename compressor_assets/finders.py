@@ -41,9 +41,19 @@ class BowerFinder(AbstractAssetFinder):
         return [settings.BOWER_COMPONENTS_ROOT]
 
 
+class NpmFinder(AbstractAssetFinder):
+    def get_paths(self):
+        return [settings.NPM_COMPONENTS_ROOT]
+
+
 class AssetFinder(AbstractAssetFinder):
     def get_paths(self):
         return [settings.COMPRESS_SOURCE_ROOT]
+
+
+class GlobalAssetFinder(AbstractAssetFinder):
+    def get_paths(self):
+        return [settings.ASSETS_DIRS]
 
 
 class AppAssetFinder(AppDirectoriesFinder):
