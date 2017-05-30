@@ -53,7 +53,7 @@ class AssetFinder(AbstractAssetFinder):
 
 class GlobalAssetFinder(AbstractAssetFinder):
     def get_paths(self):
-        return [settings.ASSETS_DIRS]
+        return settings.ASSETS_DIRS
 
 
 class AppAssetFinder(AppDirectoriesFinder):
