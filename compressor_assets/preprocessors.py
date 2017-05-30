@@ -4,11 +4,16 @@ from django.core.exceptions import ImproperlyConfigured
 class AbstractPreprocessor:
     command_template = '{command} {parameters} {infile} {outfile}'
     command = None
-    params = {}
+
+    @staticmethod
+    def get_initial_params():
+        return {}
 
     def __init__(self, **params):
         if not self.command:
             raise ImproperlyConfigured
+
+        self.params = self.get_initial_params()
         self.params.update({
             param.replace('_', '-'): value
             for param, value in params.items()
@@ -48,6 +53,10 @@ class GenericPreprocessor(AbstractPreprocessor):
 
 class SassPreprocessor(AbstractPreprocessor):
     command = 'sass'
+
+
+class TypeScriptPreprocessor(AbstractPreprocessor):
+    command = 'tsc'
 
 
 Preprocessor = GenericPreprocessor
