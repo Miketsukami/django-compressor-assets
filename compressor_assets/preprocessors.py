@@ -36,7 +36,7 @@ class AbstractPreprocessor:
     def get_command(self, delimiter='='):
         return self.command_template.format(
             command=self.command,
-            parameters=self.get_parameters(delimiter='='),
+            parameters=self.get_parameters(delimiter=delimiter),
             infile='{infile}',
             outfile='{outfile}',
         )
