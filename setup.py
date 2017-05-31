@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='django-compressor-assets',
-    version='0.1.0',
+    version='0.1.1',
     packages=['compressor_assets'],
     url='',
     license='MIT',
