@@ -19,30 +19,30 @@ class AbstractPreprocessor:
             for param, value in params.items()
         })
 
-    def get_parameters(self):
+    def get_parameters(self, delimiter='='):
         tokens = []
         for param, value in self.params.items():
             if isinstance(value, bool):
                 tokens.append(param)
             elif isinstance(value, (int, float, str)):
-                tokens.append('{}={}'.format(param, value))
+                tokens.append('{}{}{}'.format(param, delimiter, value))
             elif isinstance(value, (list, tuple, set)):
                 for item in value:
-                    tokens.append('{}={}'.format(param, item))
+                    tokens.append('{}{}{}'.format(param, delimiter, item))
             else:
                 raise ImproperlyConfigured
         return ' '.join(map('--{}'.format, tokens))
 
-    def get_command(self):
+    def get_command(self, delimiter='='):
         return self.command_template.format(
             command=self.command,
-            parameters=self.get_parameters(),
+            parameters=self.get_parameters(delimiter='='),
             infile='{infile}',
             outfile='{outfile}',
         )
 
-    def register(self, mimetype):
-        return mimetype, self.get_command()
+    def register(self, mimetype, delimiter='='):
+        return mimetype, self.get_command(delimiter)
 
 
 class GenericPreprocessor(AbstractPreprocessor):
