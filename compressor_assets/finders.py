@@ -1,3 +1,4 @@
+import warnings
 from collections import OrderedDict
 
 from django.conf import settings
@@ -34,21 +35,6 @@ class AbstractAssetFinder(FileSystemFinder):
 
     def get_paths(self):
         raise NotImplemented
-
-
-class BowerFinder(AbstractAssetFinder):
-    def get_paths(self):
-        return [settings.BOWER_COMPONENTS_ROOT]
-
-
-class NpmFinder(AbstractAssetFinder):
-    def get_paths(self):
-        return [settings.NPM_COMPONENTS_ROOT]
-
-
-class AssetFinder(AbstractAssetFinder):
-    def get_paths(self):
-        return [settings.COMPRESS_SOURCE_ROOT]
 
 
 class GlobalAssetFinder(AbstractAssetFinder):
