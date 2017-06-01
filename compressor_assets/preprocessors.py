@@ -58,3 +58,8 @@ class SassPreprocessor(AbstractPreprocessor):
 class TypeScriptPreprocessor(AbstractPreprocessor):
     command = 'tsc'
     command_template = '{command} {parameters} --outFile {outfile} {infile}'
+
+
+class BabelPreprocessor(AbstractPreprocessor):
+    command = 'babel'
+    command_template = '{command} {parameters} -o {outfile} {infile}'
