@@ -1,17 +1,22 @@
 from django.core.exceptions import ImproperlyConfigured
+from os import path
 
 
 class AbstractPreprocessor:
     command_template = '{command} {parameters} {infile} {outfile}'
     command = None
+    prefix = None
 
     @staticmethod
     def get_initial_params():
         return {}
 
-    def __init__(self, **params):
+    def __init__(self, binary_path=None, **params):
         if not self.command:
             raise ImproperlyConfigured
+
+        if binary_path:
+            self.prefix = binary_path
 
         self.params = self.get_initial_params()
         self.params.update({
@@ -25,17 +30,17 @@ class AbstractPreprocessor:
             if isinstance(value, bool):
                 tokens.append(param)
             elif isinstance(value, (int, float, str)):
-                tokens.append('{}{}{}'.format(param, delimiter, value))
+                tokens.append(delimiter.join([param, value]))
             elif isinstance(value, (list, tuple, set)):
                 for item in value:
-                    tokens.append('{}{}{}'.format(param, delimiter, item))
+                    tokens.append(delimiter.join([param, item]))
             else:
                 raise ImproperlyConfigured
         return ' '.join(map('--{}'.format, tokens))
 
     def get_command(self, delimiter='='):
         return self.command_template.format(
-            command=self.command,
+            command=path.join(self.prefix, self.command) if self.prefix else self.command,
             parameters=self.get_parameters(delimiter=delimiter),
             infile='{infile}',
             outfile='{outfile}',
@@ -51,15 +56,26 @@ class Preprocessor(AbstractPreprocessor):
         super().__init__(**params)
 
 
-class SassPreprocessor(AbstractPreprocessor):
+class Sass(AbstractPreprocessor):
     command = 'sass'
 
 
-class TypeScriptPreprocessor(AbstractPreprocessor):
+class TypeScript(AbstractPreprocessor):
     command = 'tsc'
     command_template = '{command} {parameters} --outFile {outfile} {infile}'
 
 
-class BabelPreprocessor(AbstractPreprocessor):
+class Babel(AbstractPreprocessor):
     command = 'babel'
     command_template = '{command} {parameters} -o {outfile} {infile}'
+
+
+class Browserify(AbstractPreprocessor):
+    command = 'browserify'
+    command_template = '{command} {infile} {parameters} -o {outfile}'
+
+
+TypeScriptPreprocessor = TypeScript
+BabelPreprocessor = Babel
+SassPreprocessor = Sass
+BrowserifyPrerprocessor = Browserify
