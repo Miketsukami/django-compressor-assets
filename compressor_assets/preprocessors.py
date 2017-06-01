@@ -45,7 +45,7 @@ class AbstractPreprocessor:
         return mimetype, self.get_command(delimiter)
 
 
-class GenericPreprocessor(AbstractPreprocessor):
+class Preprocessor(AbstractPreprocessor):
     def __init__(self, command, **params):
         self.command = command
         super().__init__(**params)
@@ -57,6 +57,4 @@ class SassPreprocessor(AbstractPreprocessor):
 
 class TypeScriptPreprocessor(AbstractPreprocessor):
     command = 'tsc'
-
-
-Preprocessor = GenericPreprocessor
+    command_template = '{command} {parameters} --outFile {outfile} {infile}'
