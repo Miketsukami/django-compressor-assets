@@ -72,7 +72,7 @@ class Babel(AbstractPreprocessor):
 
 class Browserify(AbstractPreprocessor):
     command = 'browserify'
-    command_template = '{command} {infile} {parameters} -o {outfile}'
+    command_template = '{command} {infile} {parameters}'
 
 
 TypeScriptPreprocessor = TypeScript
