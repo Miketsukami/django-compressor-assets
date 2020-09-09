@@ -23,10 +23,10 @@ class AbstractPreprocessor:
             if isinstance(value, bool):
                 tokens.append(param)
             elif isinstance(value, (int, float, str)):
-                tokens.append(delimiter.join([param, value]))
+                tokens.append(delimiter.join([param, str(value)]))
             elif isinstance(value, (list, tuple, set)):
                 for item in value:
-                    tokens.append(delimiter.join([param, item]))
+                    tokens.append(delimiter.join([param, str(item)]))
             else:
                 raise ImproperlyConfigured
         return ' '.join(map('--{}'.format, tokens))
