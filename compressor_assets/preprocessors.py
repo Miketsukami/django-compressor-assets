@@ -1,5 +1,5 @@
+from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
-from os import path
 
 
 class AbstractPreprocessor:
@@ -10,8 +10,14 @@ class AbstractPreprocessor:
         if not self.command:
             raise ImproperlyConfigured
 
-        self.binary_path = binary_path
-        self.interpreter = interpreter
+        self.command = Path(self.command)
+
+        if binary_path:
+            self.binary_path = Path(binary_path)
+
+        if interpreter:
+            self.interpreter = Path(interpreter)
+
         self.params = {
             param.replace('_', '-'): value
             for param, value in params.items()
@@ -22,7 +28,7 @@ class AbstractPreprocessor:
         for param, value in self.params.items():
             if isinstance(value, bool):
                 tokens.append(param)
-            elif isinstance(value, (int, float, str)):
+            elif isinstance(value, (int, float, str, Path)):
                 tokens.append(delimiter.join([param, str(value)]))
             elif isinstance(value, (list, tuple, set)):
                 for item in value:
@@ -34,10 +40,10 @@ class AbstractPreprocessor:
     def get_command(self):
         command = self.command
         if self.binary_path:
-            command = path.join(self.binary_path, command)
+            command = self.binary_path / self.command
         if self.interpreter:
-            command = ' '.join([self.interpreter, command])
-        return command
+            command = ' '.join(map(str, [self.interpreter, command]))
+        return str(command)
 
     def get_args(self, delimiter):
         return self.args_template.format(
